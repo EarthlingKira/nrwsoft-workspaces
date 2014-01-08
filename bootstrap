@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# If we have a local .bashrc then we import it
+if [ -e "$HOME/.bashrc" ] ; then
+    . $HOME/.bashrc;
+fi
+
+# Export all variables
+set -a
+
+# Set workspaces and workspace name and paths
+workspacesVersion="1.0.0"
+workspacesBashSource=${BASH_SOURCE[0]}
+workspacesSrcPath=$(dirname $(readlink -f $workspacesBashSource))
+workspacesHome=$(dirname $workspacesSrcPath)
+wsBashSource=${BASH_SOURCE[1]}
+wsName=$(basename $wsBashSource)
+wsHome=$(dirname $(readlink -f $wsBashSource))
+
+# Set bash begin
+PS1="\[\e[0;35m\]$wsName\[\e[m\]:\w\$ "
+
+# Add generic workspaces bins
+if [ -d "$workspacesSrcPath/bin" ] ; then
+    PATH="$workspacesSrcPath/bin:$PATH"
+fi
+
+# Add workspace bins
+if [ -d "$wsHome/bin" ] ; then
+    PATH="$wsHome/bin:$PATH"
+fi
+
+# Enter workspace
+cd $wsHome
+

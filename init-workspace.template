@@ -1,0 +1,8 @@
+#!/bin/bash --init-file
+
+. src/bootstrap
+
+devSsh=dev.project.invalid
+devSrcPath=/var/www/project
+srcPath=$wsHome/src
+cd $srcPath

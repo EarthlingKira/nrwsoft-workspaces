@@ -1,0 +1,5 @@
+#!/bin/bash
+
+printf "nrwsoft-workspaces Version: $workspacesVersion\n"
+printf "Thanks for using!\n\n"
+
