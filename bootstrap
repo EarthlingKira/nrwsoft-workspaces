@@ -17,6 +17,11 @@ wsBashSource=${BASH_SOURCE[1]}
 wsName=$(basename $wsBashSource)
 wsHome=$(dirname $(readlink -f $wsBashSource))
 
+#Enable local history
+HISTFILE="$wsHome/.bash_history"
+HISTFILESIZE=10000
+HISTSIZE=10000
+
 # Set bash begin
 PS1="\[\e[0;35m\]$wsName\[\e[m\]:\w\$ "
 
