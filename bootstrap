@@ -1,5 +1,29 @@
 #!/bin/bash
 
+params="$(getopt -o '' -l keep-home --name "$0" -- "$@")"
+if [ $? != 0 ] ; then echo "Failed parsing options." >&2 ; exit 1 ; fi
+eval set -- "$params"
+
+keep_home=0
+
+while true
+do
+    case "$1" in
+        --keep-home)
+            keep_home=1
+            shift
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            echo "Not implemented: $1" >&2
+            exit 1
+            ;;
+    esac
+done
+
 # If we have a local .bashrc then we import it
 if [ -e "$HOME/.bashrc" ] ; then
     . $HOME/.bashrc;
@@ -9,32 +33,38 @@ fi
 set -a
 
 # Set workspaces and workspace name and paths
-workspacesVersion="1.0.0"
-workspacesBashSource=${BASH_SOURCE[0]}
-workspacesSrcPath=$(dirname $(readlink -f $workspacesBashSource))
-workspacesHome=$(dirname $workspacesSrcPath)
-wsBashSource=${BASH_SOURCE[1]}
-wsName=$(basename $wsBashSource)
-wsHome=$(dirname $(readlink -f $wsBashSource))
+workspaces_version="2.0.0"
+workspaces_bash_source=${BASH_SOURCE[0]}
+workspaces_src_path=$(dirname $(readlink -f $workspaces_bash_source))
+workspaces_home=$(dirname $workspaces_src_path)
+
+ws_bash_source=${BASH_SOURCE[1]}
+ws_name=$(basename $ws_bash_source)
+ws_home=$(dirname $(readlink -f $ws_bash_source))
+
 
 #Enable local history
-HISTFILE="$wsHome/.bash_history"
-HISTFILESIZE=10000
-HISTSIZE=10000
+HISTFILE="$ws_home/.bash_history"
+HISTFILESIZE=100100
+HISTSIZE=100100
 
 # Set bash begin
-PS1="\[\e[0;35m\]$wsName\[\e[m\]:\w\$ "
+PS1="\[\e[0;35m\]$ws_name\[\e[m\]:\w\$ "
 
 # Add generic workspaces bins
-if [ -d "$workspacesSrcPath/bin" ] ; then
-    PATH="$workspacesSrcPath/bin:$PATH"
+if [ -d "$workspaces_src_path/bin" ] ; then
+    PATH="$workspaces_src_path/bin:$PATH"
 fi
 
 # Add workspace bins
-if [ -d "$wsHome/bin" ] ; then
-    PATH="$wsHome/bin:$PATH"
+if [ -d "$ws_home/bin" ] ; then
+    PATH="$ws_home/bin:$PATH"
 fi
 
+if [ $keep_home = 0 ]; then HOME="$ws_home"; fi
+
 # Enter workspace
-cd $wsHome
+cd "$ws_home"
+
+
 

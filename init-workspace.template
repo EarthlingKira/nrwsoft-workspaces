@@ -2,7 +2,11 @@
 
 . src/bootstrap
 
-devSsh=dev.project.invalid
-devSrcPath=/var/www/project
-srcPath=$wsHome/src
-cd $srcPath
+# In case you want to keep $HOME unchanged
+# . src/bootstrap --keep-home
+
+src_path=$ws_home/src
+cd $src_path
+
+# Remove auto-export of variables
+set +a
