@@ -61,7 +61,7 @@ if [ -d "$ws_home/bin" ] ; then
     PATH="$ws_home/bin:$PATH"
 fi
 
-if [ $keep_home = 0 ]; then HOME="$ws_home"; fi
+if [ $keep_home = 0 ]; then ORIG_HOME="$HOME"; HOME="$ws_home"; fi
 
 # Enter workspace
 cd "$ws_home"
